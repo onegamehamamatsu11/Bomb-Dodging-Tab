@@ -61,12 +61,16 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/爆弾避けタブレット.loader.js";
+
+// ページを読み込むたびに新しいURLを使用
+var cacheVersion = Date.now().toString();
+
+var loaderUrl = buildUrl + "/爆弾避けタブレット.loader.js?v=" + cacheVersion;
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/爆弾避けタブレット.data.unityweb",
-        frameworkUrl: buildUrl + "/爆弾避けタブレット.framework.js.unityweb",
-        codeUrl: buildUrl + "/爆弾避けタブレット.wasm.unityweb",
+        dataUrl: buildUrl + "/爆弾避けタブレット.data.unityweb?v=" + cacheVersion,
+frameworkUrl: buildUrl + "/爆弾避けタブレット.framework.js.unityweb?v=" + cacheVersion,
+codeUrl: buildUrl + "/爆弾避けタブレット.wasm.unityweb?v=" + cacheVersion,
         streamingAssetsUrl: "StreamingAssets",
 
         // If you have a custom web site structure, or want to place multiple Unity build instances on the same page,

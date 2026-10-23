@@ -1,33 +1,25 @@
-const cacheName = "DefaultCompany-爆弾避けゲームタブレット-1.0";
-const contentToCache = [
-    "Build/爆弾避けタブレット.loader.js",
-    "Build/爆弾避けタブレット.framework.js.unityweb",
-    "Build/爆弾避けタブレット.data.unityweb",
-    "Build/爆弾避けタブレット.wasm.unityweb",
-    "TemplateData/style.css"
 
-];
+const cacheName = "BombAvoidGame-Update-v2";
 
-self.addEventListener('install', function (e) {
-    console.log('[Service Worker] Install');
-    
-    e.waitUntil((async function () {
-      const cache = await caches.open(cacheName);
-      console.log('[Service Worker] Caching all: app shell and content');
-      await cache.addAll(contentToCache);
-    })());
+// 古いキャッシュを削除
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+      await self.clients.claim();
+    })()
+  );
 });
 
-self.addEventListener('fetch', function (e) {
-    e.respondWith((async function () {
-      let response = await caches.match(e.request);
-      console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
-      if (response) { return response; }
+// 新しいService Workerをすぐに有効化
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
+});
 
-      response = await fetch(e.request);
-      const cache = await caches.open(cacheName);
-      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
-      cache.put(e.request, response.clone());
-      return response;
-    })());
+// ゲームデータは常にネットワークから取得
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    fetch(event.request, { cache: "no-store" })
+  );
 });

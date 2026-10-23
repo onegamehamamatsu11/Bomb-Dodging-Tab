@@ -61,7 +61,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/爆弾避けタブレット.loader.js";
+
+// ページを読み込むたびに新しいURLを使用
+var cacheVersion = Date.now().toString();
+
+var loaderUrl = buildUrl + "/爆弾避けタブレット.loader.js?v=" + cacheVersion;
       var config = {
         arguments: [],
         dataUrl: buildUrl + "/爆弾避けタブレット.data.unityweb",
